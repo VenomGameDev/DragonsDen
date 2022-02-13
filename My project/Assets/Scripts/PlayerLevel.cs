@@ -9,16 +9,15 @@ public class PlayerLevel : MonoBehaviour
     public int expRequired = 20;
     public int currentExp = 0;
 
+    public TMP_Text levelText;
     public TMP_Text currentExpTxt;
-    public TMP_Text expRequiredTxt;
     public PlayerStats playerStats;
-
-    public BanditEnemy banditExpPoints;
 
     void Start()
     {
+        levelText.text = playerLevel.ToString();
         
-        expRequiredTxt.text = expRequired.ToString();
+        currentExpTxt.text = (currentExp.ToString() + "/" + expRequired.ToString()); 
 
         
 
@@ -29,14 +28,15 @@ public class PlayerLevel : MonoBehaviour
 
     {
         LevelUp();
+        levelText.text = playerLevel.ToString();
     }
 
 
-    public void GainExp()
+    public void GainExp(int expGain)
     {
  
-        currentExp += banditExpPoints.banditExp;
-        currentExpTxt.text = currentExp.ToString();
+        currentExp += expGain;
+        currentExpTxt.text = (currentExp.ToString() + "/" + expRequired.ToString()); 
     }
 
     public void LevelUp()
@@ -46,23 +46,36 @@ public class PlayerLevel : MonoBehaviour
         {
             playerLevel++;
             expRequired = 120;
-            expRequiredTxt.text = expRequired.ToString();
+            currentExpTxt.text = (currentExp.ToString() + "/" + expRequired.ToString()); 
             playerStats.playerStrength += 2;
             playerStats.maxHealth += 20;
             playerStats.currentHealth = playerStats.maxHealth;
+            FindObjectOfType<AudioManager>().Play("LevelUp");
         }
 
         if (currentExp >= expRequired && playerLevel == 2)
         {
             playerLevel++;
             expRequired = 420;
-            expRequiredTxt.text = expRequired.ToString();
+            currentExpTxt.text = (currentExp.ToString() + "/" + expRequired.ToString()); 
             playerStats.playerStrength += 3;
-            playerStats.maxHealth += 30;
+            playerStats.maxHealth += 25;
             playerStats.currentHealth = playerStats.maxHealth;
+            FindObjectOfType<AudioManager>().Play("LevelUp");
 
         }    
 
+        if (currentExp >= expRequired && playerLevel == 3)
+        {
+            playerLevel++;
+            expRequired = 1000;
+            currentExpTxt.text = (currentExp.ToString() + "/" + expRequired.ToString()); 
+            playerStats.playerStrength += 5;
+            playerStats.maxHealth += 30;
+            playerStats.currentHealth = playerStats.maxHealth;
+            FindObjectOfType<AudioManager>().Play("LevelUp");
+
+        }    
 
     }
 

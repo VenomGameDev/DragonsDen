@@ -47,7 +47,7 @@ public class PlayerStats : MonoBehaviour
 
     {
         animator.SetTrigger("TakeDamage");
-        currentHealth -= damage;
+        currentHealth -= damage - playerDefense;
         GameOver();
     }
 
@@ -59,6 +59,18 @@ public class PlayerStats : MonoBehaviour
         healthBar.SetHealth(currentHealth);
         Hitpoints.text = currentHealth.ToString();
         attackText.text = playerStrength.ToString();
+
+
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+
+
+
+        }
+
+    
+        
 
     }
 

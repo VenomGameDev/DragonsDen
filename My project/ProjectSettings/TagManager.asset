@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Bandit
   - Enemy
+  - Gold
+  - Goblin
+  - BanditBoss
   layers:
   - Default
   - TransparentFX
@@ -14,10 +17,10 @@ TagManager:
   - Water
   - UI
   - Background Layer
-  - Enemies
+  - 
   - Obstacle
-  - 
-  - 
+  - IgnoreBoundry?
+  - Enemies
   - 
   - 
   - 

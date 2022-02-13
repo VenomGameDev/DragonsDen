@@ -105,9 +105,13 @@ GameObject:
   - component: {fileID: 8428841074385433464}
   - component: {fileID: 1788328332}
   - component: {fileID: 1788328333}
+  - component: {fileID: 2068668248}
+  - component: {fileID: 2068668250}
+  - component: {fileID: 2068668251}
+  - component: {fileID: 2068668252}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -233,8 +237,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.09876609, y: 0.0016666651}
-  m_Size: {x: 0.47722125, y: 1.1529167}
+  m_Offset: {x: -0.09876609, y: 0.0080497265}
+  m_Size: {x: 0.47722125, y: 1.1401505}
   m_Direction: 0
 --- !u!114 &8428841074385433460
 MonoBehaviour:
@@ -264,13 +268,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a13ae6940a596f843842caf657080540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_JumpForce: 400
+  m_JumpForce: 550
   m_CrouchSpeed: 0.36
   m_MovementSmoothing: 0.05
   m_AirControl: 1
   m_WhatIsGround:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 511
   m_GroundCheck: {fileID: 8428841073939951667}
   m_CeilingCheck: {fileID: 8428841074287762826}
   m_CrouchDisableCollider: {fileID: 0}
@@ -311,7 +315,7 @@ MonoBehaviour:
   attackRange: 0.37
   enemyLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 1024
   timeBetweenAttacks: 0
   cooldown: 0
 --- !u!114 &1788328332
@@ -329,10 +333,11 @@ MonoBehaviour:
   playerLevel: 1
   expRequired: 20
   currentExp: 0
-  currentExpTxt: {fileID: 0}
+  levelText: {fileID: 0}
   expRequiredTxt: {fileID: 0}
+  currentExpTxt: {fileID: 0}
   playerStats: {fileID: 1788328333}
-  banditExpPoints: {fileID: 8547499975582485667, guid: 6e02b22b1f10e384f81b43dd9e95b6a4, type: 3}
+  banditExpPoints: {fileID: 0}
 --- !u!114 &1788328333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,14 +350,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e830e68981e3de6498fae977fa399131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackText: {fileID: 0}
+  defenseText: {fileID: 0}
   maxHealth: 100
   currentHealth: 0
-  playerStrength: 10
+  playerStrength: 30
+  playerDefense: 0
   animator: {fileID: 8428841074385433461}
   Hitpoints: {fileID: 0}
   mainScreen: {fileID: 0}
   deathScreen: {fileID: 0}
   healthBar: {fileID: 0}
+--- !u!114 &2068668248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8428841074385433456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcea2ec8941cbb448b8239f24b2271d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8428841074385433456}
+--- !u!114 &2068668250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8428841074385433456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8604456778a1c41aa0a7b5382ec2f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldCount: 12
+  potionCount: 1
+  hasDualBlade: 0
+  goldInventoryText: {fileID: 0}
+  goldInvMerchantText: {fileID: 0}
+  potionCountText: {fileID: 0}
+--- !u!114 &2068668251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8428841074385433456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0355f5ef170b37d44a06180ed3feeec8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pLayerInventory: {fileID: 2068668250}
+  playerStats: {fileID: 1788328333}
+--- !u!114 &2068668252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8428841074385433456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1531be281957534fa4dba51cc3ef38c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInventory: {fileID: 2068668250}
+  goldImage: {fileID: 366142058729812156, guid: 7110596d25a71054abde807ebe24adcc, type: 3}
+  banditGoldDrop: {fileID: 0}
+  banditGoldAcquired: 0
+  isPickedUp: 0
 --- !u!1 &8428841075380493530
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,16 +10,23 @@ public class NPCDialogue : MonoBehaviour
     public Canvas npcDialogueMenu;
     public Canvas rumorsDialogue;
     public Canvas waresDialogue;
+    public Canvas dualBladeDialogue;
     public GameObject cam1;
     public GameObject cam2;
+    public NPCMenu npcMenu;
 
-
+    public AudioSource audioSourceWorldMusic;
+    public AudioSource audioSourceMerchant;
+    
+    
     void Start() 
     
     {
+
+        dualBladeDialogue.enabled = false;
         npcDialogueMenu.enabled = false;
         npcInteractText.enabled = false;
-
+        
     }
 
 
@@ -28,7 +35,8 @@ public class NPCDialogue : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-        Debug.Log("Test");
+        audioSourceWorldMusic.Stop();
+        audioSourceMerchant.Play();
         npcInteractText.enabled = true;
         cam1.SetActive(false);
         cam2.SetActive(true);
@@ -48,6 +56,9 @@ public class NPCDialogue : MonoBehaviour
         npcDialogueMenu.enabled = false;
         rumorsDialogue.enabled = false;
         waresDialogue.enabled = false;
+        dualBladeDialogue.enabled = false;
+        audioSourceMerchant.Stop();
+        audioSourceWorldMusic.Play();
 
     }
 

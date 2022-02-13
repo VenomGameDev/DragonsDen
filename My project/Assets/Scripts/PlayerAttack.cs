@@ -38,7 +38,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 Attack();
                 FindObjectOfType<AudioManager>().Play("Swing1");
-                Debug.Log("You hit the bandit for " + attackDamage);
+               
             }
            
         }
@@ -58,8 +58,24 @@ public class PlayerAttack : MonoBehaviour
         //Damage them
         foreach(Collider2D enemy in hitEnemies)
         { 
+            if (enemy.tag == "Bandit")
+            {
                 enemy.GetComponent<BanditEnemy>().TakeDamage(attackDamage);
-            FindObjectOfType<AudioManager>().Play("Slice");
+                FindObjectOfType<AudioManager>().Play("Slice");
+            }
+
+            else if (enemy.tag == "BanditBoss")
+            {
+                enemy.GetComponent<BanditBoss>().TakeDamage(attackDamage);
+                FindObjectOfType<AudioManager>().Play("Slice");
+            }
+
+            else if (enemy.tag == "Goblin")
+            {
+                enemy.GetComponent<GoblinEnemy>().TakeDamage(attackDamage);
+                FindObjectOfType<AudioManager>().Play("Slice");
+            }
+            
         }
     }
 

@@ -1,129 +1,140 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class BanditEnemy : MonoBehaviour
 {
 
-    public GameObject FloatingTextPrefab;
     public Animator animator;
-    EnemyGFX textFlip;
-   
-    public PlayerLevel expGain;
+    public LayerMask playerLayer;
+    [SerializeField] private CapsuleCollider2D capsuleCollider;
 
+    [SerializeField] GoldDrop goldDrop;
+    private EnemyPatrol enemyPatrol;
 
-    public int banditMaxHealth = 100;
+    [SerializeField] GameObject healthBar;
+
+    [SerializeField] Slider slider;
+    [SerializeField] TMP_Text banditHealth;
+
+    [SerializeField] Transform banditAttackPoint;
+    [SerializeField] Transform goldDropLocation;
+    
+    [SerializeField] float colliderDistance;
+    [SerializeField] float range;
+    public int maxHealth = 100;
     public int currentHealth;
     public int banditExp = 40;
-
-    public int damageTaken;
-
-    public Transform banditAttackPoint;
-    public Transform floatingTextPosition;
-
     public int banditAttackDamage = 20;
     public float attackRange = 0.5f;
-    public float timeBetweenAttacks, cooldown;
+    [SerializeField] float timeBetweenAttacks = 3f;
+    [SerializeField] float cooldown = 3f;
 
+    public bool isDead = false;
 
-    public LayerMask playerLayer;
-
-    public void Start()
+    void Awake()
     {
-        banditExp = 40;
-        textFlip = GetComponent<EnemyGFX>();
-        cooldown = 2;
-        currentHealth = banditMaxHealth;
-        timeBetweenAttacks = cooldown;
+        enemyPatrol = GetComponentInParent<EnemyPatrol>();
+    }
+
+    private void OnDisable() 
+    {
+        animator.SetBool("move", false);
+    }
+
+    void Start()
+    {
+        healthBar.SetActive(false);
+        slider.maxValue = maxHealth;
+        banditHealth.text = maxHealth.ToString();
+        currentHealth = maxHealth;
 
     }
 
-    private void Update()
+     void Update()
     {
 
+        slider.value = currentHealth;
         if (timeBetweenAttacks > 0)
         {
             timeBetweenAttacks -= Time.deltaTime;
         }
-        else if (timeBetweenAttacks <= 0)
+        else if (timeBetweenAttacks <= 0 && !isDead)
         {
             banditAttack();
         }
+        if (enemyPatrol != null)
+            enemyPatrol.enabled = !PlayerInSight();
 
     }
-
     public void TakeDamage(int damage)
 
     {
-        damageTaken = damage;
+        
         currentHealth -= damage;
+        healthBar.SetActive(true);
+        banditHealth.text = currentHealth.ToString();
+        
         animator.SetTrigger("TakeDamage");
-
-        //Populates floating text if appliable
-        if (FloatingTextPrefab)
-        {
-            ShowFloatingText();
-        }
 
         if (currentHealth <= 0)
         {
-            expGain.GainExp();
+            FindObjectOfType<PlayerLevel>().GainExp(banditExp);
             Die();
-            
-            
         }
 
         void Die()
         {
-           
+            isDead = true;
             animator.SetTrigger("BanditKilled");
-            
-            Destroy(gameObject, 1);
+            healthBar.SetActive(false);
+            goldDrop.DropGold();
+            goldDropLocation.transform.parent =null;
+            enemyPatrol.speed = 0f;
+            Invoke("DisableEnemy", 1f);
 
         }
-
-
     }
-
-
     void banditAttack()
     {
-
-        animator.SetTrigger("BanditAttack");
-        timeBetweenAttacks = cooldown;
-
-        Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(banditAttackPoint.position, attackRange, playerLayer);
-
-        //Damage the Player
-        foreach (Collider2D player in hitPlayer)
+        if (PlayerInSight())
         {
-                player.GetComponent<PlayerStats>().TakeDamage(banditAttackDamage);
-            FindObjectOfType<AudioManager>().Play("Slice");
+            animator.SetTrigger("BanditAttack");
+            timeBetweenAttacks = cooldown;
+
+            Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(banditAttackPoint.position, attackRange, playerLayer);
+
+            //Damage the Player
+            foreach (Collider2D player in hitPlayer)
+            {
+                    player.GetComponent<PlayerStats>().TakeDamage(banditAttackDamage);
+                    FindObjectOfType<AudioManager>().Play("Slice");
+            }
         }
-
-
     }
 
-    //Function that populates floating damage text
-    void ShowFloatingText()
-    {
+private bool PlayerInSight()
+{
 
+    RaycastHit2D hit = Physics2D.BoxCast(capsuleCollider.bounds.center + transform.right *range * transform.localScale.x * colliderDistance,
+    new Vector3(capsuleCollider.bounds.size.x * range, capsuleCollider.bounds.size.y, capsuleCollider.bounds.size.z),
+    0, Vector2.left, 0, playerLayer);
 
-        if (textFlip.lookingRight == true)
-        {
-            var go = Instantiate(FloatingTextPrefab, floatingTextPosition.position, Quaternion.identity, transform);
-            go.GetComponent<TextMeshPro>().text = damageTaken.ToString();
-        }
-        else if (textFlip.lookingRight == false)
-        {
-            var go = Instantiate(FloatingTextPrefab, floatingTextPosition.position, Quaternion.Euler(0,180,0), transform);
-            go.GetComponent<TextMeshPro>().text = damageTaken.ToString();
-
-
-        }
-
-        
-    
-    }
-
+    return hit.collider !=null;
 
 }
+
+private void OnDrawGizmos() 
+{
+    Gizmos.color = Color.red;
+    Gizmos.DrawWireCube(capsuleCollider.bounds.center + transform.right * range * transform.localScale.x *colliderDistance, new Vector3(capsuleCollider.bounds.size.x * range, 
+    capsuleCollider.bounds.size.y, capsuleCollider.bounds.size.z));
+}
+
+private void DisableEnemy()
+{
+    gameObject.SetActive(false);
+}
+
+}
+

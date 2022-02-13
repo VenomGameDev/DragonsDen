@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             jump = true;
-            animator.SetBool("isJumping", true);
+            animator.SetTrigger("Jump");
             
         }
     }
